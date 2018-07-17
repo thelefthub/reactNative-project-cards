@@ -8,7 +8,7 @@ function CardBtn ({ onPress }) {
       <TouchableOpacity
         style={styles.cardBtn}
         onPress={onPress}>
-          <Text style={styles.submitBtnText}>New card</Text>
+          <Text style={styles.btnText}>New card</Text>
       </TouchableOpacity>
     )
 }
@@ -34,18 +34,35 @@ export default class DeckDetail extends Component {
             this.setState({deck: response})
             console.log('deck: ', this.state.deck);
             
-        }).catch(function(error) {
-            console.log('err: ',error);
-          });
+        })
+    }
+
+    componentDidUpdate() {
+        console.log('update detail');
+        
+        // Storage.getDecks().then((response) => {
+        //     if (Object.keys(this.state.list).length != Object.keys(response).length) {
+        //         this.setState({list: response})
+        //     }
+        // });
+        Storage.getDeck(this.props.navigation.state.params.title).then((response) => {
+            console.log('deck state: ', this.state.deck);
+            console.log('deck rest: ', response);
+            if (response.questions.length != this.state.deck.questions.length) {
+                this.setState({deck: response})
+                console.log('deck updated: ', this.state.deck);
+            }
+        })
     }
 
     render() {
         return (
             <View>
-                <Text style={styles.text}>Deck: {this.state.deck.title}</Text>
-                <Text style={styles.cards}>Cards: {this.state.deck.questions == null ? '0' : this.state.deck.questions.length} cards</Text>
-                <CardBtn onPress={() => navigation.navigate('AddCard', {title})} />
-                <QuizBtn onPress={() => navigation.navigate('Quiz', {title})} />
+                {/* <Text style={styles.text}>param: {this.props.navigation.state.params.title}</Text> */}
+                <Text style={styles.text}>{this.state.deck.title}</Text>
+                <Text style={styles.cards}>{this.state.deck.questions == null ? '0' : this.state.deck.questions.length} cards</Text>
+                <CardBtn onPress={() => this.props.navigation.navigate('AddCard', {'title':this.state.deck.title})} />
+                <QuizBtn onPress={() => this.props.navigation.navigate('Quiz', {'title':this.state.deck.title})} />
             </View>
         )
 
@@ -55,22 +72,22 @@ export default class DeckDetail extends Component {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      justifyContent: 'flex-start',
-      padding: 10
+        flex: 1,
+        justifyContent: 'flex-start',
+        padding: 10
     },cardBtn: {
-      backgroundColor: blue,
-      padding: 10,
-      paddingLeft: 30,
-      paddingRight: 30,
-      height: 45,
-      borderRadius: 2,
-      alignSelf: 'center',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom: 20,
-    },quizBtn: {
         backgroundColor: blue,
+        padding: 10,
+        paddingLeft: 30,
+        paddingRight: 30,
+        height: 45,
+        borderRadius: 2,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+    },quizBtn: {
+        backgroundColor: orange,
         padding: 10,
         paddingLeft: 30,
         paddingRight: 30,
@@ -82,22 +99,23 @@ const styles = StyleSheet.create({
         marginBottom: 20,
       },
     btnText: {
-      color: white,
-      fontSize: 22,
-      textAlign: 'center',
+        color: white,
+        fontSize: 22,
+        textAlign: 'center',
     },
     text: {
-      fontSize: 35,
-      marginBottom: 20,
-      padding: 10,
+        fontSize: 35,
+        marginBottom: 20,
+        padding: 10,
+        justifyContent: 'center',
+        alignSelf: 'center',
   
     },
     cards: {
-      fontSize: 30,
-      // textDecorationLine: 'none',
-      // textDecorationColor: orange,
-      marginBottom: 20,
-      padding: 10,
+        fontSize: 30,
+        marginBottom: 20,
+        padding: 10,
+        alignSelf: 'center',
   
     }
 })

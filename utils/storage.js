@@ -56,7 +56,7 @@ export function getDeck(deckKey) {
     }).then((parsed) => {
       return parsed[deckKey];
    }).catch(function(error) {
-    console.log('err2: ',error);
+    console.log('err: ',error);
   });
 
 }
@@ -70,9 +70,6 @@ export function addDeck(deckKey) {
 
 // add a new card to a specified deck ({question: '', answer: ''})
 export function addCard(deckKey, card) {
-    // return AsyncStorage.mergeItem(CARD_STORAGE_KEY, JSON.stringify({
-    //     [deckKey]: questions.push(card)
-    //   }))
     return AsyncStorage.getItem(CARD_STORAGE_KEY)
     .then((results) => {
       const data = JSON.parse(results);

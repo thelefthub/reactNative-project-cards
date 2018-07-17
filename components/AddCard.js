@@ -25,23 +25,21 @@ export default class AddCard extends Component {
         Keyboard.dismiss();
         if(this.state.title !== "") {
             this.textInput.clear();
-            Storage.addCard(this.state.title, this.state);
-            let nav = this.props.navigation.state.params.title
-            this.props.navigation.navigate('DeckDetail', {nav});
-            this.setState({
-                question: "",
-                answer: ""
-            });
-            
-
+            Storage.addCard(this.props.navigation.state.params.title, this.state)
+            .then(() => {
+                let nav = this.props.navigation.state.params.title
+                this.setState({
+                    question: "",
+                    answer: ""
+                });
+                this.props.navigation.navigate('DeckDetail', {nav});
+             })
         }
-        
-
     }
 
     render() {
         return (
-            <KeyboardAvoidingView behavior="padding" style={styles.container}>
+            <KeyboardAvoidingView style={styles.container}>
                 <Text style={styles.text}>Add new card</Text>
                 <TextInput
                 style={styles.input}
@@ -88,7 +86,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 35,
-    marginBottom: 20,
+    marginBottom: 5,
     padding: 10,
 
   },
@@ -96,7 +94,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     // textDecorationLine: 'none',
     // textDecorationColor: orange,
-    marginBottom: 20,
+    marginBottom: 10,
     padding: 10,
 
   }

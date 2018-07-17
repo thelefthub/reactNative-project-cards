@@ -25,8 +25,8 @@ export default class AddDeck extends Component {
         if(this.state.title !== "") {
             this.textInput.clear();
             Storage.addDeck(this.state.title);
-            let nav = this.state.title
-            this.props.navigation.navigate('DeckDetail', {nav});
+            // let nav = this.state.title
+            this.props.navigation.navigate('DeckDetail', {title:this.state.title});
             this.setState({
                 title: ""
             });
@@ -39,7 +39,7 @@ export default class AddDeck extends Component {
 
     render() {
         return (
-            <KeyboardAvoidingView behavior="padding" style={styles.container}>
+            <KeyboardAvoidingView style={styles.container}>
                 <Text style={styles.text}>Add new deck</Text>
                 <TextInput
                 style={styles.input}
