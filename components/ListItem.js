@@ -6,7 +6,7 @@ export default function ListItem ({ title, questions, navigation }) {
     return (
         <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('DeckDetail', {title})}>
             <Text style={styles.title}>{title}</Text>
-            <Text style={styles.text}>questions.length Cards</Text>
+            <Text style={styles.text}>{questions.length} Cards</Text>
         </TouchableOpacity>
     )
   }

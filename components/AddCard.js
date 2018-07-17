@@ -14,9 +14,10 @@ function SubmitBtn ({ onPress }) {
     )
 }
 
-export default class AddDeck extends Component {
+export default class AddCard extends Component {
     state = {
-        title: ""
+        question: "",
+        answer: ""
     }
 
     // on submit
@@ -24,11 +25,12 @@ export default class AddDeck extends Component {
         Keyboard.dismiss();
         if(this.state.title !== "") {
             this.textInput.clear();
-            Storage.addDeck(this.state.title);
-            let nav = this.state.title
+            Storage.addCard(this.state.title, this.state);
+            let nav = this.props.navigation.state.params.title
             this.props.navigation.navigate('DeckDetail', {nav});
             this.setState({
-                title: ""
+                question: "",
+                answer: ""
             });
             
 
@@ -40,11 +42,17 @@ export default class AddDeck extends Component {
     render() {
         return (
             <KeyboardAvoidingView behavior="padding" style={styles.container}>
-                <Text style={styles.text}>Add new deck</Text>
+                <Text style={styles.text}>Add new card</Text>
                 <TextInput
                 style={styles.input}
-                placeholder="Your title"
-                onChangeText={(title) => this.setState({title})}
+                placeholder="Your question"
+                onChangeText={(question) => this.setState({question})}
+                ref={input => { this.textInput = input }}
+                />
+                <TextInput
+                style={styles.input}
+                placeholder="Your answer"
+                onChangeText={(answer) => this.setState({answer})}
                 ref={input => { this.textInput = input }}
                 />
                 <SubmitBtn onPress={this.submit} />

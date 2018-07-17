@@ -6,6 +6,7 @@ import { FontAwesome, Entypo } from '@expo/vector-icons'
 import DeckList from './components/DeckList'
 import AddDeck from './components/AddDeck'
 import DeckDetail from './components/DeckDetail'
+import Quiz from './components/Quiz'
 
 
 const TabNavigator = createBottomTabNavigator({
@@ -43,6 +44,12 @@ const MainNavigator = createStackNavigator({
     screen: DeckDetail,
     navigationOptions: {
       title: "Detail"
+    }
+  },
+  Quiz: {
+    screen: Quiz,
+    navigationOptions: {
+      title: "Quiz"
     }
   }
 });

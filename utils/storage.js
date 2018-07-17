@@ -50,10 +50,14 @@ export function getDecks() {
 
 // get a specific deck
 export function getDeck(deckKey) {
-    AsyncStorage.getItem(CARD_STORAGE_KEY)
+    return AsyncStorage.getItem(CARD_STORAGE_KEY)
     .then((results) => {
-      return JSON.parse(results[deckKey]);
-    })
+       return JSON.parse(results);
+    }).then((parsed) => {
+      return parsed[deckKey];
+   }).catch(function(error) {
+    console.log('err2: ',error);
+  });
 
 }
 
@@ -65,7 +69,7 @@ export function addDeck(deckKey) {
 }
 
 // add a new card to a specified deck ({question: '', answer: ''})
-export function addCard({ deckKey, card }) {
+export function addCard(deckKey, card) {
     // return AsyncStorage.mergeItem(CARD_STORAGE_KEY, JSON.stringify({
     //     [deckKey]: questions.push(card)
     //   }))
@@ -80,7 +84,6 @@ export function addCard({ deckKey, card }) {
 
 // check presence of data for testing purposes checkResults
 function checkResults(results) {
-    console.log("check deck called");
     return results === null
       ? setDummyData()
       : JSON.parse(results)

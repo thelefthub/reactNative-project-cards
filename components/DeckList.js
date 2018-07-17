@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, FlatList } from 'react-native'
-import * as Storage from '../utils/storage';
+import * as Storage from '../utils/storage'
 import ListItem from './ListItem'
 
 
@@ -15,8 +15,11 @@ export default class DeckList extends Component {
     }
 
     componentDidUpdate() {
-        //infinite loop!!!! check if list has changed...
-        //Storage.getDecks().then((response) => {this.setState({list: response})});
+        Storage.getDecks().then((response) => {
+            if (Object.keys(this.state.list).length != Object.keys(response).length) {
+                this.setState({list: response})
+            }
+        });
     }
 
     render() {
