@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import * as Storage from '../utils/storage';
-import { backGrey, orange, blue, white } from '../utils/colors'
+import { backGrey, orange, blue, white, green } from '../utils/colors'
+
 
 function CardBtn ({ onPress }) {
     return (
@@ -26,11 +27,14 @@ function QuizBtn ({ onPress }) {
 
 export default class DeckDetail extends Component {
     state = {
-        deck : {}
+        deck : {
+            title: '',
+            questions: []
+          },
     }
 
     componentDidMount() {
-        Storage.getDeck(this.props.navigation.state.params.title).then((response) => {
+       Storage.getDeck(this.props.navigation.state.params.title).then((response) => {
             this.setState({deck: response})
             console.log('deck: ', this.state.deck);
             
@@ -38,16 +42,14 @@ export default class DeckDetail extends Component {
     }
 
     componentDidUpdate() {
-        console.log('update detail');
-        
         // Storage.getDecks().then((response) => {
         //     if (Object.keys(this.state.list).length != Object.keys(response).length) {
         //         this.setState({list: response})
         //     }
         // });
         Storage.getDeck(this.props.navigation.state.params.title).then((response) => {
-            console.log('deck state: ', this.state.deck);
-            console.log('deck rest: ', response);
+            // console.log('deck state: ', this.state.deck);
+            // console.log('deck rest: ', response);
             if (response.questions.length != this.state.deck.questions.length) {
                 this.setState({deck: response})
                 console.log('deck updated: ', this.state.deck);
@@ -58,11 +60,14 @@ export default class DeckDetail extends Component {
     render() {
         return (
             <View>
-                {/* <Text style={styles.text}>param: {this.props.navigation.state.params.title}</Text> */}
                 <Text style={styles.text}>{this.state.deck.title}</Text>
-                <Text style={styles.cards}>{this.state.deck.questions == null ? '0' : this.state.deck.questions.length} cards</Text>
+                <Text style={styles.cards}>{this.state.deck.questions.length} cards</Text>
                 <CardBtn onPress={() => this.props.navigation.navigate('AddCard', {'title':this.state.deck.title})} />
-                <QuizBtn onPress={() => this.props.navigation.navigate('Quiz', {'title':this.state.deck.title})} />
+                {this.state.deck.questions.length === 0 
+                ? 
+                <Text style={styles.enable}>Add cards to enable quiz mode!</Text> 
+                : 
+                <QuizBtn onPress={() => this.props.navigation.navigate('Quiz', {'title':this.state.deck.title})} />}
             </View>
         )
 
@@ -115,7 +120,17 @@ const styles = StyleSheet.create({
         fontSize: 30,
         marginBottom: 20,
         padding: 10,
+        justifyContent: 'center',
         alignSelf: 'center',
+        color: green
+  
+    },enable: {
+        fontSize: 15,
+        marginBottom: 20,
+        padding: 10,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        color: orange
   
     }
 })

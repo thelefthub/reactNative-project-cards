@@ -15,8 +15,6 @@ export default class DeckList extends Component {
     }
 
     componentDidUpdate() {
-        console.log('update');
-        
         Storage.getDecks().then((response) => {
             if (Object.keys(this.state.list).length != Object.keys(response).length) {
                 this.setState({list: response})
