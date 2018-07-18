@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native'
 import * as Storage from '../utils/storage';
 import { backGrey, orange, blue, white, green } from '../utils/colors'
 
@@ -31,6 +31,7 @@ export default class DeckDetail extends Component {
             title: '',
             questions: []
           },
+          fadeIn: new Animated.Value(0)
     }
 
     componentDidMount() {
@@ -39,6 +40,8 @@ export default class DeckDetail extends Component {
             console.log('deck: ', this.state.deck);
             
         })
+        Animated.timing(this.state.fadeIn, { toValue: 1, duration: 200}).start()
+        Animated.spring(this.state.fadeIn, { toValue: 1, friction: 4}).start()
     }
 
     componentDidUpdate() {
@@ -60,7 +63,11 @@ export default class DeckDetail extends Component {
     render() {
         return (
             <View>
-                <Text style={styles.text}>{this.state.deck.title}</Text>
+                <Animated.Text
+                    style={[styles.text, { opacity: this.state.fadeIn }]}>
+                    {this.state.deck.title}
+                </Animated.Text>
+                {/* <Text style={styles.text}>{this.state.deck.title}</Text> */}
                 <Text style={styles.cards}>{this.state.deck.questions.length} cards</Text>
                 <CardBtn onPress={() => this.props.navigation.navigate('AddCard', {'title':this.state.deck.title})} />
                 {this.state.deck.questions.length === 0 

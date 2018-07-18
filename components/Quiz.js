@@ -38,7 +38,7 @@ function RestartBtn ({ onPress }) {
       <TouchableOpacity
         style={styles.restartBtn}
         onPress={onPress}>
-          <Text style={styles.btnText}>False</Text>
+          <Text style={styles.btnText}>Restart</Text>
       </TouchableOpacity>
     )
 }
@@ -48,7 +48,7 @@ function BackBtn ({ onPress }) {
       <TouchableOpacity
         style={styles.backBtn}
         onPress={onPress}>
-          <Text style={styles.btnText}>False</Text>
+          <Text style={styles.btnText}>Back</Text>
       </TouchableOpacity>
     )
 }
@@ -65,15 +65,12 @@ export default class Quiz extends Component {
         count: 0,
         check: false,
         score: 0,
-        final: false
-
     }
 
     componentDidMount() {
         Storage.getDeck(this.props.navigation.state.params.title).then((response) => {
             this.setState({deck: response})
             console.log('deck: ', this.state.deck);
-            
         })
     }
 
@@ -98,10 +95,27 @@ export default class Quiz extends Component {
           }));
     }
 
+    onRestart = () => {
+        this.setState({
+            count: 0,
+            check: false,
+            score: 0
+        });
+    }
+
     render() {
         return (
             <View>
-                {!this.state.final ? 
+                {this.state.deck.questions.length === this.state.count 
+                ?
+                <View>
+                    <Text style={styles.text}>Your Score: {this.state.score}/{this.state.deck.questions.length}</Text>
+                    <View style={styles.btnContainer}>
+                        <BackBtn onPress={() => this.props.navigation.navigate('DeckDetail', {title: this.state.deck.title})} />
+                        <RestartBtn onPress={this.onRestart} />
+                    </View>
+                </View> 
+                :
                 <View>
                     <Text style={styles.text}>Question {this.state.count+1} of {this.state.deck.questions.length}</Text>
                     <Text style={styles.cards}>{this.state.deck.questions[this.state.count].question}</Text>
@@ -111,11 +125,6 @@ export default class Quiz extends Component {
                         <CorrectBtn onPress={this.onCorrect} />
                         <FalseBtn onPress={this.onFalse} />
                     </View> 
-                </View>
-                :
-                <View>
-                    <Text style={styles.text}>Your Score: </Text>
-                    <Text style={styles.cards}>{this.state.result}</Text>
                 </View>
                 }
             </View>
