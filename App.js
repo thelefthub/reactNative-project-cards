@@ -8,6 +8,7 @@ import AddDeck from './components/AddDeck'
 import DeckDetail from './components/DeckDetail'
 import Quiz from './components/Quiz'
 import AddCard from './components/AddCard'
+import { setLocalNotification } from './utils/helpers'
 
 
 const TabNavigator = createBottomTabNavigator({
@@ -64,8 +65,7 @@ const MainNavigator = createStackNavigator({
 
 export default class App extends React.Component {
   componentDidMount() {
-    
-    
+    setLocalNotification();
   }
   render() {
     return (
@@ -75,14 +75,3 @@ export default class App extends React.Component {
     );
   }
 }
-
-
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: darkGrey,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-// });

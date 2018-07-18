@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, Animated } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Animated, Easing } from 'react-native'
 import * as Storage from '../utils/storage';
 import { backGrey, orange, blue, white, green } from '../utils/colors'
 
@@ -31,7 +31,7 @@ export default class DeckDetail extends Component {
             title: '',
             questions: []
           },
-          fadeIn: new Animated.Value(0)
+          fadeIn: new Animated.Value(0.3)
     }
 
     componentDidMount() {
@@ -41,18 +41,11 @@ export default class DeckDetail extends Component {
             
         })
         Animated.timing(this.state.fadeIn, { toValue: 1, duration: 200}).start()
-        Animated.spring(this.state.fadeIn, { toValue: 1, friction: 4}).start()
+        // Animated.spring(this.state.fadeIn, { toValue: 1, friction: 4}).start()
     }
 
     componentDidUpdate() {
-        // Storage.getDecks().then((response) => {
-        //     if (Object.keys(this.state.list).length != Object.keys(response).length) {
-        //         this.setState({list: response})
-        //     }
-        // });
         Storage.getDeck(this.props.navigation.state.params.title).then((response) => {
-            // console.log('deck state: ', this.state.deck);
-            // console.log('deck rest: ', response);
             if (response.questions.length != this.state.deck.questions.length) {
                 this.setState({deck: response})
                 console.log('deck updated: ', this.state.deck);
@@ -62,12 +55,8 @@ export default class DeckDetail extends Component {
 
     render() {
         return (
-            <View>
-                <Animated.Text
-                    style={[styles.text, { opacity: this.state.fadeIn }]}>
-                    {this.state.deck.title}
-                </Animated.Text>
-                {/* <Text style={styles.text}>{this.state.deck.title}</Text> */}
+            <Animated.View style={ { opacity: this.state.fadeIn }}>
+                <Text style={styles.text}>{this.state.deck.title}</Text>
                 <Text style={styles.cards}>{this.state.deck.questions.length} cards</Text>
                 <CardBtn onPress={() => this.props.navigation.navigate('AddCard', {'title':this.state.deck.title})} />
                 {this.state.deck.questions.length === 0 
@@ -75,7 +64,7 @@ export default class DeckDetail extends Component {
                 <Text style={styles.enable}>Add cards to enable quiz mode!</Text> 
                 : 
                 <QuizBtn onPress={() => this.props.navigation.navigate('Quiz', {'title':this.state.deck.title})} />}
-            </View>
+            </Animated.View>
         )
 
     }

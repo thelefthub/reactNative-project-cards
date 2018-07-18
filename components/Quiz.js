@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Keyboard } from 'react-native'
 import { backGrey, orange, blue, white, green } from '../utils/colors'
 import * as Storage from '../utils/storage';
+import { clearLocalNotification, setLocalNotification } from '../utils/helpers'
 
 function CheckBtn ({ onPress }) {
     return (
@@ -96,11 +97,20 @@ export default class Quiz extends Component {
     }
 
     onRestart = () => {
+        clearLocalNotification()
+        .then(setLocalNotification);
+
         this.setState({
             count: 0,
             check: false,
             score: 0
         });
+    }
+
+    onBack = () => {
+        clearLocalNotification()
+        .then(setLocalNotification)
+        .then(this.props.navigation.navigate('DeckDetail', {title: this.state.deck.title}));
     }
 
     render() {
@@ -111,8 +121,8 @@ export default class Quiz extends Component {
                 <View>
                     <Text style={styles.text}>Your Score: {this.state.score}/{this.state.deck.questions.length}</Text>
                     <View style={styles.btnContainer}>
-                        <BackBtn onPress={() => this.props.navigation.navigate('DeckDetail', {title: this.state.deck.title})} />
-                        <RestartBtn onPress={this.onRestart} />
+                        <BackBtn onPress={this.onBack} />
+                        <RestartBtn onPress={this.onRestart}/>
                     </View>
                 </View> 
                 :

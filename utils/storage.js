@@ -2,6 +2,7 @@ import { AsyncStorage } from 'react-native'
 
 const CARD_STORAGE_KEY = 'cardsProject:card';
 
+// dummy data for testing
 const DUMMY_DATA = {
     React: {
       title: 'React',
@@ -29,23 +30,8 @@ const DUMMY_DATA = {
 
 // get all decks
 export function getDecks() {
-    // AsyncStorage.getItem(CARD_STORAGE_KEY)
-    // .then((results) => {
-    //     console.log('waarom????');
-    //     return setDummyData()
-    // }).catch((err) => {
-    //     console.log('error2', err);
-    //   });
-    // console.log('waarom????');
-    // AsyncStorage.getItem(CARD_STORAGE_KEY).then((response) => {
-    //     console.log('hallo????', response);
-    //  })
     return AsyncStorage.getItem(CARD_STORAGE_KEY)
     .then(checkResults)
-    
-    
-    
-    
 }
 
 // get a specific deck
@@ -95,7 +81,7 @@ function setDummyData() {
     
 }
 
-// for testing
+// for testing purposes
 export function deleteAll() {
     console.log("delete!");
     AsyncStorage.removeItem(CARD_STORAGE_KEY);

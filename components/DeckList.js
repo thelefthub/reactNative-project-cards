@@ -8,26 +8,35 @@ export default class DeckList extends Component {
     state = {
         list : {}
     }
-
+    
     componentDidMount() {
-        // Storage.deleteAll();
         Storage.getDecks().then((response) => {this.setState({list: response})});
+
+        const willFocusSub = this.props.navigation.addListener(
+            'willFocus',
+            payload => {
+              console.log('didBlur', payload);
+              Storage.getDecks().then((response) => {this.setState({list: response})});
+            }
+        );
     }
 
-    componentDidUpdate() {
-        Storage.getDecks().then((response) => {
-            if (Object.keys(this.state.list).length != Object.keys(response).length) {
-                this.setState({list: response})
-            }
-        });
-    }
+    // componentDidUpdate() {
+    //     Storage.getDecks().then((response) => {
+    //         if (Object.keys(this.state.list).length != Object.keys(response).length) {
+    //             this.setState({list: response})
+    //         }
+    //     });
+    // }
+
+    componentWillUnmount() {
+        this.willFocusSub.remove();
+      }
 
     render() {
                 
         let renderList = Object.keys(this.state.list).map(title => ({title, questions: this.state.list[title].questions}));
-        // console.log(this.state.list);
-        // console.log(renderList);
-        
+       
         return (
             <View>
                 <FlatList
